@@ -1,0 +1,62 @@
+<html>
+<center>
+  <b>Robot Controller</b><br><br>
+  <p>Current Position
+  <br>X<input type="text" id="currentPosX" maxlength="1" style="text-align:right" onkeypress='return event.charCode >= 48 && event.charCode <= 57'></input>
+  <br>Y<input type="text" id="currentPosY" maxlength="1" style="text-align:right" onkeypress='return event.charCode >= 48 && event.charCode <= 57'></input>
+  </p> 
+  <p>Waypoint
+  <br>X<input type="text" id="waypointX" maxlength="1" style="text-align:right" onkeypress='return event.charCode >= 48 && event.charCode <= 57'></input>
+  <br>Y<input type="text" id="waypointY" maxlength="1" style="text-align:right" onkeypress='return event.charCode >= 48 && event.charCode <= 57'></input>
+  </p>
+  <button onclick = "updateWaypoint()">Update Waypoint</button>
+  <br>
+  <button onclick = "setRun()">Run</button>
+  
+  <p id = "myText">Waiting...</p>
+ </center> 
+  <script>
+    function updateWaypoint()
+    {
+       var namex = "waypointX";
+       var namey = "waypointY";
+       var x_val = document.getElementById("waypointX").value;
+       var y_val = document.getElementById("waypointY").value;
+       var msgx = "set=" + 100 + "to" + x_val;
+       var msgy =  "set=" + 101 + "to" + y_val;
+       
+       httpPost("/controller_post", msgx);
+       httpPost("/controller_post", msgy);
+       
+       document.getElementById("myText").innerHTML = 
+       "Updated Waypoint";
+    }
+  
+  
+    function setRun()
+    {
+       var namex = "currentPosX";
+       var namey = "currentPosY";
+       var x_val = document.getElementById("currentPosX").value;
+       var y_val = document.getElementById("currentPosY").value;
+       var msgx = "set=" + 200 + "to" + x_val;
+       var msgy = "set=" + 201 + "to" + y_val;
+       
+       httpPost("/controller_post", msgx);
+       httpPost("/controller_post", msgy);
+       document.getElementById("myText").innerHTML = 
+       "Running";
+    }
+
+    function httpPost(path, param)
+    {
+      var req = new XMLHttpRequest();
+      req.open("POST", path, true);
+      req.setRequestHeader("Content-type",
+      "application/x-www-form-urlencoded");
+      req.send(param);
+    }
+  </script>
+</html>
+
+
